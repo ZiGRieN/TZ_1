@@ -28,7 +28,6 @@ E:\TZ\TZ_1\TZ_1\bin\ru\System.Web.Razor.resources.dll
 E:\TZ\TZ_1\TZ_1\bin\ru\System.Web.WebPages.resources.dll
 E:\TZ\TZ_1\TZ_1\bin\ru\System.Web.WebPages.Deployment.resources.dll
 E:\TZ\TZ_1\TZ_1\bin\ru\System.Web.WebPages.Razor.resources.dll
-E:\TZ\TZ_1\TZ_1\obj\Debug\TZ_1.csprojResolveAssemblyReference.cache
 E:\TZ\TZ_1\TZ_1\obj\Debug\TZ_1.dll
 E:\TZ\TZ_1\TZ_1\obj\Debug\TZ_1.pdb
 E:\TZ\TZ_1\TZ_1\bin\EntityFramework.dll

@@ -6,12 +6,13 @@
 <!DOCTYPE html>
 <html>
 
-<body ng-app="AdresApp" ng-controller="HomeController">
+<body ng-app="AdresApp" ng-controller="HomeController as Home">
     <script type="text/javascript" src="~/Scripts/angular.js"></script>
     <script type="text/javascript" src="~/Scripts/angular-touch.js"></script>
     <script type="text/javascript" src="~/Scripts/angular-animate.js"></script>
     <link rel="stylesheet" type="text/css" href="~/Content/ng-grid.css" />
     <link rel="stylesheet" href="~/Content/Site.css">
+   
     <script type="text/javascript" src="~/Scripts/moment.js"></script>
     <script type="text/javascript" src="~/Scripts/moment.min.js"></script>
     <script type="text/javascript" src="~/Scripts/jquery-3.1.1.js"></script>
@@ -26,11 +27,14 @@
     <script type="text/javascript" src="~/Scripts/ui-grid.js"></script>
     <script type="text/javascript" src="~/Scripts/daterangepicker.js"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
-
+    <script type="text/javascript" src="~/Scripts/ng-table.js"></script>
+    <script type="text/javascript" src="~/Scripts/ng-table.min.js"></script>
     <link rel="stylesheet" href="~/Content/ui-grid.css" />
     <link rel="stylesheet" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/daterangepicker.css" />
     <link rel="stylesheet" href="~/Content/bootstrap.daterangepicker.css" />
+    <link rel="stylesheet" href="~/Content/ng-table.min.css" />
+    <link rel="stylesheet" href="~/Content/ng-table.css" />
     <!--<div class="container" ng-app="AdresApp" ng-controller="HomeController">
          <table class="table">
              <thead>
@@ -61,18 +65,31 @@
              </tbody>
          </table>
      </div>-->
+    <!--ng-grid таблица
     <div class="table table-bordered table table-hover" ng-grid="gridOptions" > 
         
     </div>
     <input type="text" data-range-picker name="daterange" value="" />
     <input date-range-picker class="form-control date-picker" type="text" name="daterange"/>
+        -->
+    <table ng-table="Home.tableParams" class="table" >
+        <tr ng-repeat="adr in $data">
+            <td title="Country" filter="{ Country: 'text'}" sortable="'Country'">
+                {{adr.Country}}
+            </td>
+            <td title="City" filter="{ City: 'text'}" sortable="'City'">
+                {{adr.City}}
+            </td>
+        </tr>
+    </table>
     <script type="text/javascript">
         
 
 
-        var app = angular.module('AdresApp', ['ngTouch', 'ngAnimate', 'ngGrid']);
+        //var app = angular.module('AdresApp', ['ngTouch', 'ngAnimate', 'ngGrid', 'ngTable']);
         
-        app.controller('HomeController', function ($scope, AdresService, $http, $element) {
+       /* app.controller('HomeController', function ($scope, AdresService, $http, $element, ngTableParams, HomeController) {
+            HomeController.$inject = ["NgTableParams", "ngTableSimpleList"];
             $scope.style =
                 {
                     "width": "90%",
@@ -84,6 +101,14 @@
             $(function () {
                 $('input[name="daterange"]').daterangepicker();
             });
+            data = [{ Country: "USA", City: "New York" }];
+            function ngTable(NgTableParams, simpleList)
+            {
+                var self = this;
+                self.tableParams = new NgTableParams({}, { dataset: data });
+            }
+            ngTable.$inject = ["$scope", "NgTableParams", "ngTableSimpleList"];
+            module.exports = ngTable;
             // UI-Grid
             /*$scope.highlightFilteredHeader = function (row, rowRenderIndex, col, colRenderIndex) {
                 if (col.filters[0].term) {
@@ -119,7 +144,7 @@
               });*/
             //UI-Grid
            
-            var color;
+          /*  var color;
            $scope.filterTemplate = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
             +'<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>'+
                 '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
@@ -141,7 +166,7 @@
            },100);*/
            
           
-           $scope.country = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
+        /*   $scope.country = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
             + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
                 '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
                 '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
@@ -278,7 +303,20 @@
                 return $http.get('/Home/GetAdres');
             }
             return AdresService;
-        }]);
+        }]);*/
+
+            var app = angular.module('AdresApp', ["ngTable"]);
+            app.controller('HomeController', HomeController);
+            var data = [{ Country: "Britain", City: "London" }/*,*/];
+                    //HomeController.$inject = ["NgTableParams", "data"];
+                     
+                    function HomeController(NgTableParams)
+                    {
+                        var self = this;
+                        self.tableParams = new NgTableParams({}, { dataset: data });
+                    };
+                    
+   
     </script>
 </body>
 
