@@ -74,10 +74,10 @@
         -->
     <table ng-table="Home.tableParams" class="table" >
         <tr ng-repeat="adr in $data">
-            <td title="Country" filter="{ Country: 'text'}" sortable="'Country'">
+            <td data-title="'Country'" filter="{ Country: 'text'}" sortable="'Country'">
                 {{adr.Country}}
             </td>
-            <td title="City" filter="{ City: 'text'}" sortable="'City'">
+            <td data-title="'City'" filter="{ City: 'text'}" sortable="'City'">
                 {{adr.City}}
             </td>
         </tr>

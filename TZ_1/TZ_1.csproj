@@ -123,42 +123,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Addresses.cs">
-      <DependentUpon>AdresaModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AdresaModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdresaModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AdresaModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdresaModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AdresaModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdresaModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="City.cs">
-      <DependentUpon>AdresaModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Country.cs">
-      <DependentUpon>AdresaModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Street.cs">
-      <DependentUpon>AdresaModel.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -217,23 +190,6 @@
     <Content Include="Content\ui-grid.woff" />
     <Content Include="Content\ui-grid.ttf" />
     <Content Include="Content\ui-grid.eot" />
-    <EntityDeploy Include="AdresaModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AdresaModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="AdresaModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AdresaModel.edmx</DependentUpon>
-      <LastGenOutput>AdresaModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="AdresaModel.edmx.diagram">
-      <DependentUpon>AdresaModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="AdresaModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AdresaModel.edmx</DependentUpon>
-      <LastGenOutput>AdresaModel.cs</LastGenOutput>
-    </Content>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

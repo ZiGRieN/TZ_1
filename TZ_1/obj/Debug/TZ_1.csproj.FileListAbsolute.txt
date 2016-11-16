@@ -39,3 +39,4 @@ E:\TZ\TZ_1\TZ_1\bin\NLog.config
 E:\TZ\TZ_1\TZ_1\bin\NLog.dll
 E:\TZ\TZ_1\TZ_1\bin\NLog.xml
 E:\TZ\TZ_1\TZ_1\bin\ru\EntityFramework.SqlServer.resources.dll
+E:\TZ\TZ_1\TZ_1\obj\Debug\TZ_1.csprojResolveAssemblyReference.cache

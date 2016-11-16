@@ -483,3 +483,13 @@
 2016-11-15 22:57:25.8452 TZ_1.Controllers.HomeController Sample error message
 2016-11-15 22:57:25.8452 TZ_1.Controllers.HomeController Sample fatal error message
 2016-11-15 22:57:25.8452 TZ_1.Controllers.HomeController Sample informational message
+2016-11-16 07:36:32.7118 TZ_1.Controllers.HomeController Sample informational message
+2016-11-16 07:36:32.7568 TZ_1.Controllers.HomeController Sample warning message
+2016-11-16 07:36:32.7568 TZ_1.Controllers.HomeController Sample error message
+2016-11-16 07:36:32.7628 TZ_1.Controllers.HomeController Sample fatal error message
+2016-11-16 07:36:32.7628 TZ_1.Controllers.HomeController Sample informational message
+2016-11-16 07:37:30.3874 TZ_1.Controllers.HomeController Sample informational message
+2016-11-16 07:37:30.3874 TZ_1.Controllers.HomeController Sample warning message
+2016-11-16 07:37:30.3874 TZ_1.Controllers.HomeController Sample error message
+2016-11-16 07:37:30.3874 TZ_1.Controllers.HomeController Sample fatal error message
+2016-11-16 07:37:30.3874 TZ_1.Controllers.HomeController Sample informational message
