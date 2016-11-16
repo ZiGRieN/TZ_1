@@ -10,7 +10,7 @@ namespace TZ_1.Controllers
 {
     public class HomeController : Controller
     {
-        AdresaDBEntities e = new AdresaDBEntities();
+        AdresesDBEntities e = new AdresesDBEntities();
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
        public ActionResult Index()
@@ -50,14 +50,14 @@ namespace TZ_1.Controllers
            return s;
        }*/
        
-     /* public JsonResult GetAdres()
+         public JsonResult GetAdres()
        {
-           AdresaDBEntities e = new AdresaDBEntities();
+            AdresesDBEntities e = new AdresesDBEntities();
            //var result = e.Addresses.ToList();
            var result = e.Addresses.Select(x => new {Id = x.Id, Country = x.Country.Country1, City = x.City1.City1, Street = x.Street1.Street1, House = x.House, Indeks = x.Indeks, Data = x.Data }).ToList();
            return Json(result,JsonRequestBehavior.AllowGet);
         
-       }*/
+       }
      
        
        /* public ActionResult GetAdres()

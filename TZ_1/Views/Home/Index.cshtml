@@ -73,7 +73,7 @@
     <input date-range-picker class="form-control date-picker" type="text" name="daterange"/>
         -->
     <table ng-table="Home.tableParams" class="table" >
-        <tr ng-repeat="adr in $data">
+        <tr ng-repeat="adr in data">
             <td data-title="'Country'" filter="{ Country: 'text'}" sortable="'Country'">
                 {{adr.Country}}
             </td>
@@ -307,16 +307,43 @@
 
             var app = angular.module('AdresApp', ["ngTable"]);
             app.controller('HomeController', HomeController);
-            var data = [{ Country: "Britain", City: "London" }/*,*/];
-                    //HomeController.$inject = ["NgTableParams", "data"];
-                     
-                    function HomeController(NgTableParams)
+            
+            
+            function HomeController(NgTableParams, $scope, $http, $filter)
+            {
+                $scope.data = [];
+                var AdrSet = [];
+                var AdresaSet = [];
+                var self = this;
+                var data = [{ Country: "Britain", City: "London" }];
+                self.tableParams = new NgTableParams(
                     {
-                        var self = this;
-                        self.tableParams = new NgTableParams({}, { dataset: data });
-                    };
-                    
-   
+                        page: 1,
+                        count: $scope.data.length,
+                        
+                        sorting:
+                            {
+                                name: 'asc'     // initial sorting
+                            }
+                        
+                    },
+                    {
+                        filterDelay: 0,
+                        total: 1,
+                        getData: function ($defer, params)
+                        {
+                            
+                             $http.get('/Home/GetAdres').success(function (response)
+                             {
+                                 $scope.data = response;
+                                 //params.total(response.inlineCount);
+                                 $scope.data = $filter('orderBy')($scope.response, params.orderBy());
+                                 $defer.resolve($scope.data);
+                            })
+                        }
+                    });
+            };
+
     </script>
 </body>
 

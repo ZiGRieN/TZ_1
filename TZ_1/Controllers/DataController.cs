@@ -27,13 +27,13 @@ namespace TZ_1.Controllers
             var s = from p in e.Addresses.AsEnumerable() select p;
             return s;
         }*/
-        public JsonResult GetAdres()
+        /*public JsonResult GetAdres()
         {
             AdresaDBEntities e = new AdresaDBEntities();
             var result = e.Addresses.ToList();
             
             return Json(result, JsonRequestBehavior.AllowGet);
 
-        }
+        }*/
     }
 }
