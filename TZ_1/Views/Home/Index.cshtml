@@ -74,11 +74,25 @@
         -->
     <table ng-table="Home.tableParams" class="table" >
         <tr ng-repeat="adr in data">
+
             <td data-title="'Country'" filter="{ Country: 'text'}" sortable="'Country'">
+
                 {{adr.Country}}
             </td>
             <td data-title="'City'" filter="{ City: 'text'}" sortable="'City'">
                 {{adr.City}}
+            </td>
+            <td data-title="'Street'" filter="{ Street: 'text'}" sortable="'Street'">
+                {{adr.Street}}
+            </td>
+            <td data-title="'House'" filter="{ House: 'number'}" sortable="'House'">
+                {{adr.House}}
+            </td>
+            <td data-title="'Index'" filter="{ Indeks: 'number'}" sortable="'Indeks'">
+                {{adr.Indeks}}
+            </td>
+            <td data-title="'Data'" filter="{ Data: 'data'}" sortable="'Data'">
+                {{adr.Data}}
             </td>
         </tr>
     </table>
@@ -307,43 +321,70 @@
 
             var app = angular.module('AdresApp', ["ngTable"]);
             app.controller('HomeController', HomeController);
-            
-            
-            function HomeController(NgTableParams, $scope, $http, $filter)
+            function HomeController( $scope, $http, $filter, NgTableParams)
             {
                 $scope.data = [];
-                var AdrSet = [];
-                var AdresaSet = [];
+                $scope.adresSet = [];
+                $scope.getData = function ()
+                {
+                     $http.get('/Home/GetAdres').then(function (response) {
+                       /* angular.forEach(response, function (a, key) {
+                            response[key].Data = moment(response[key].Data).format('YYYY.D.M');
+                        })*/
+                        
+                        /*angular.forEach($scope.data, function (a, i) {
+                            $scope.adresSet[i] = [{
+                                Country: $scope.data[i].Country,
+                                City: $scope.data[i].City,
+                                Street: $scope.data[i].Street,
+                                House: $scope.data[i].House,
+                                Indeks: $scope.data[i].Indeks,
+                                Data: $scope.data[i].Data
+                            }];
+                        })*/
+                        response.data;
+                    });
+                }
+
+                
                 var self = this;
-                var data = [{ Country: "Britain", City: "London" }];
-                self.tableParams = new NgTableParams(
-                    {
+                //var data = [{ Country: "Britain", City: "London" }];
+                self.tableParams = new NgTableParams
+                    ({
                         page: 1,
-                        count: $scope.data.length,
-                        
-                        sorting:
-                            {
-                                name: 'asc'     // initial sorting
-                            }
-                        
+                        count: 2,
+                        sorting: {},
+                        filter: {}
                     },
                     {
                         filterDelay: 0,
-                        total: 1,
+                        total: 0,
                         getData: function ($defer, params)
                         {
-                            
-                             $http.get('/Home/GetAdres').success(function (response)
-                             {
-                                 $scope.data = response;
-                                 //params.total(response.inlineCount);
-                                 $scope.data = $filter('orderBy')($scope.response, params.orderBy());
-                                 $defer.resolve($scope.data);
+                            /*$scope.getData().then(function (data) {
+                                var courses = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+                                courses = params.filter() ? $filter('filter')(courses, params.filter()) : courses;
+                                courses = courses.slice(0, 20);
+                                $defer.resolve(courses);
                             })
+                           /* $scope.getData();
+                            $scope.data = params.sorting() ? $filter('orderBy')($scope.courses, params.orderBy()) : $scope.courses;
+                            $scope.data = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
+                            $scope.data = $scope.data.slice(0, 20);
+                            return $scope.data;*/
+                            $http.get('/Home/GetAdres').then(function (response) {
+                                /* angular.forEach(response, function (a, key) {
+                                     response[key].Data = moment(response[key].Data).format('YYYY.D.M');
+                                 })*/
+                                $scope.data = response.data;
+                                $scope.data = params.sorting() ? $filter('orderBy')($scope.courses, params.orderBy()) : $scope.data;
+                                $scope.data = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
+                                $scope.data = $scope.data.slice(0, 20);
+                                return $scope.data;
+                            });
                         }
-                    });
-            };
-
+                    })
+            }
     </script>
 </body>
 
