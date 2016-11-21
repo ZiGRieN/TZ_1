@@ -8,6 +8,8 @@
 
 <body ng-app="AdresApp" ng-controller="HomeController as Home">
     <script type="text/javascript" src="~/Scripts/angular.js"></script>
+    <script type="text/javascript" src="~/Scripts/angular-resource.js"></script>
+    <script type="text/javascript" src="~/Scripts/angular-resource.min.js"></script>
     <script type="text/javascript" src="~/Scripts/angular-touch.js"></script>
     <script type="text/javascript" src="~/Scripts/angular-animate.js"></script>
     <link rel="stylesheet" type="text/css" href="~/Content/ng-grid.css" />
@@ -28,7 +30,6 @@
     <script type="text/javascript" src="~/Scripts/daterangepicker.js"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script type="text/javascript" src="~/Scripts/ng-table.js"></script>
-    <script type="text/javascript" src="~/Scripts/ng-table.min.js"></script>
     <link rel="stylesheet" href="~/Content/ui-grid.css" />
     <link rel="stylesheet" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" href="~/Content/daterangepicker.css" />
@@ -72,9 +73,12 @@
     <input type="text" data-range-picker name="daterange" value="" />
     <input date-range-picker class="form-control date-picker" type="text" name="daterange"/>
         -->
-    <table ng-table="Home.tableParams" class="table" >
-        <tr ng-repeat="adr in data">
-
+   <!-- <table ng-table="Home.tableParams" class="table" >
+        <tr ng-repeat="adr in data" class="text-center" ng-class="{
+                                    'sort-asc': tableParams.isSortBy(adr.field, 'asc'),
+                                    'sort-desc': tableParams.isSortBy(adr.field, 'desc'),
+                                    'sortable': !$first
+                                    }"ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
             <td data-title="'Country'" filter="{ Country: 'text'}" sortable="'Country'">
 
                 {{adr.Country}}
@@ -95,297 +99,304 @@
                 {{adr.Data}}
             </td>
         </tr>
+    </table>-->
+    
+    <table ng-table-dynamic="Home.tableParams with Home.cols" class="table table-condensed table-bordered table-striped">
+        <tr ng-repeat="row in $data">
+            <td ng-repeat="col in $columns">{{row[col.field]}}</td>
+        </tr>
     </table>
-    <script type="text/javascript">
-        
+        <script type="text/javascript">
 
 
-        //var app = angular.module('AdresApp', ['ngTouch', 'ngAnimate', 'ngGrid', 'ngTable']);
-        
-       /* app.controller('HomeController', function ($scope, AdresService, $http, $element, ngTableParams, HomeController) {
-            HomeController.$inject = ["NgTableParams", "ngTableSimpleList"];
-            $scope.style =
-                {
-                    "width": "90%",
-                    "align": "center",
-                    "height": "25px",
-                    "margin-left": "5%",
-                    "margin-right":"5%"
-                };
-            $(function () {
-                $('input[name="daterange"]').daterangepicker();
-            });
-            data = [{ Country: "USA", City: "New York" }];
-            function ngTable(NgTableParams, simpleList)
-            {
-                var self = this;
-                self.tableParams = new NgTableParams({}, { dataset: data });
-            }
-            ngTable.$inject = ["$scope", "NgTableParams", "ngTableSimpleList"];
-            module.exports = ngTable;
-            // UI-Grid
-            /*$scope.highlightFilteredHeader = function (row, rowRenderIndex, col, colRenderIndex) {
-                if (col.filters[0].term) {
-                    return 'header-filtered';
-                } else {
-                    return '';
-                }
-            };
 
-            $scope.gridOptions =
-                {
-                    enableFiltering: true,
-                };
-              $scope.gridOptions.columnDefs =
-                  [
-                      { name: 'Id', headerCellClass: $scope.highlightFilteredHeader },
-                      { name: 'Country', displayName: "Город"},
-                      { name: 'City' },
-                      { name: 'Street' },
-                      { name: 'House' },
-                      { name: 'Indeks' },
-                      {
-                          name: 'Data', filter: {
-                              condition: uiGridConstants.filter.GREATER_THAN,
-                              placeholder: 'greater than'
-                          }
-                      }
-  
-                  ];
-              $http.get('/Home/GetAdres')
-              .success(function (adr) {
-                  $scope.gridOptions.data = adr;
-              });*/
+            //var app = angular.module('AdresApp', ['ngTouch', 'ngAnimate', 'ngGrid', 'ngTable']);
+
+            /* app.controller('HomeController', function ($scope, AdresService, $http, $element, ngTableParams, HomeController) {
+                 HomeController.$inject = ["NgTableParams", "ngTableSimpleList"];
+                 $scope.style =
+                     {
+                         "width": "90%",
+                         "align": "center",
+                         "height": "25px",
+                         "margin-left": "5%",
+                         "margin-right":"5%"
+                     };
+                 $(function () {
+                     $('input[name="daterange"]').daterangepicker();
+                 });
+                 data = [{ Country: "USA", City: "New York" }];
+                 function ngTable(NgTableParams, simpleList)
+                 {
+                     var self = this;
+                     self.tableParams = new NgTableParams({}, { dataset: data });
+                 }
+                 ngTable.$inject = ["$scope", "NgTableParams", "ngTableSimpleList"];
+                 module.exports = ngTable;
+                 // UI-Grid
+                 /*$scope.highlightFilteredHeader = function (row, rowRenderIndex, col, colRenderIndex) {
+                     if (col.filters[0].term) {
+                         return 'header-filtered';
+                     } else {
+                         return '';
+                     }
+                 };
+
+                 $scope.gridOptions =
+                     {
+                         enableFiltering: true,
+                     };
+                   $scope.gridOptions.columnDefs =
+                       [
+                           { name: 'Id', headerCellClass: $scope.highlightFilteredHeader },
+                           { name: 'Country', displayName: "Город"},
+                           { name: 'City' },
+                           { name: 'Street' },
+                           { name: 'House' },
+                           { name: 'Indeks' },
+                           {
+                               name: 'Data', filter: {
+                                   condition: uiGridConstants.filter.GREATER_THAN,
+                                   placeholder: 'greater than'
+                               }
+                           }
+
+                       ];
+                   $http.get('/Home/GetAdres')
+                   .success(function (adr) {
+                       $scope.gridOptions.data = adr;
+                   });*/
             //UI-Grid
-           
-          /*  var color;
-           $scope.filterTemplate = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
-            +'<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>'+
-                '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
-                '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
-                '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
-                '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
-                '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>'+
-               '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>' +
-               '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
+
+            /*  var color;
+             $scope.filterTemplate = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
+              +'<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>'+
+                  '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
+                  '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
+                  '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
+                  '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
+                  '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>'+
+                 '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>' +
+                 '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
 
 
-           //"{ \'width\' : col.width - 14 + \'px\' }"
-         
+             //"{ \'width\' : col.width - 14 + \'px\' }"
 
-         /*  AdresService.getAdres().success(function (adr, page) {
-               //$scope.adres = adr;
-               var page = adr.length;
-               $scope.setPagingData(adr, page, pageSize);
-           },100);*/
-           
-          
-        /*   $scope.country = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
-            + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
-                '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
-                '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
-                '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
-                '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
-                '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>' +
-               '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;" list="Country">' +
-               '<datalist id="Country"><option ng-repeat="item in sel">{{item.Country}}</option></datalist>' +
-               '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
-           $scope.City = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
-           + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
-               '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
-               '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
-               '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
-               '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
-               '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>' +
-              '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;" list="City">' +
-              '<datalist id="City"><option ng-repeat="item in sel">{{item.City}}</option></datalist>' +
-              '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
-           $scope.Street = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
-           + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
-               '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
-               '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
-               '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
-               '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
-               '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>' +
-              '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;" list="Street">' +
-              '<datalist id="Street"><option ng-repeat="item in sel">{{item.Street}}</option></datalist>' +
-              '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
-            var filterBarPlugin = {
-                init: function (scope, grid) {
-                    filterBarPlugin.scope = scope;
-                    filterBarPlugin.grid = grid;
-                    $scope.$watch(function () {
-                        var searchQuery = "";
-                        angular.forEach(filterBarPlugin.scope.columns, function (col) {
-                            if (col.visible && col.filterText) {
-                                var filterText = (col.filterText.indexOf('*') === 0 ? col.filterText.replace('*', '') : "^" + col.filterText) + ";";
-                                searchQuery += col.displayName + ": " + filterText; 
-                            }
+
+           /*  AdresService.getAdres().success(function (adr, page) {
+                 //$scope.adres = adr;
+                 var page = adr.length;
+                 $scope.setPagingData(adr, page, pageSize);
+             },100);*/
+
+
+            /*   $scope.country = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
+                + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
+                    '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
+                    '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
+                    '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
+                    '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
+                    '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>' +
+                   '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;" list="Country">' +
+                   '<datalist id="Country"><option ng-repeat="item in sel">{{item.Country}}</option></datalist>' +
+                   '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
+               $scope.City = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
+               + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
+                   '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
+                   '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
+                   '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
+                   '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
+                   '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>' +
+                  '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;" list="City">' +
+                  '<datalist id="City"><option ng-repeat="item in sel">{{item.City}}</option></datalist>' +
+                  '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
+               $scope.Street = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
+               + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
+                   '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
+                   '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
+                   '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
+                   '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
+                   '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>' +
+                  '<input type="text" ng-click="stopClickProp($event)" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;" list="Street">' +
+                  '<datalist id="Street"><option ng-repeat="item in sel">{{item.Street}}</option></datalist>' +
+                  '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
+                var filterBarPlugin = {
+                    init: function (scope, grid) {
+                        filterBarPlugin.scope = scope;
+                        filterBarPlugin.grid = grid;
+                        $scope.$watch(function () {
+                            var searchQuery = "";
+                            angular.forEach(filterBarPlugin.scope.columns, function (col) {
+                                if (col.visible && col.filterText) {
+                                    var filterText = (col.filterText.indexOf('*') === 0 ? col.filterText.replace('*', '') : "^" + col.filterText) + ";";
+                                    searchQuery += col.displayName + ": " + filterText;
+                                }
+                            });
+                            return searchQuery;
+
+                        }, function (searchQuery) {
+                            filterBarPlugin.scope.$parent.filterText = searchQuery;
+                            filterBarPlugin.grid.searchProvider.evalFilter();
+
+
                         });
-                        return searchQuery;
-                        
-                    }, function (searchQuery) {
-                        filterBarPlugin.scope.$parent.filterText = searchQuery;
-                        filterBarPlugin.grid.searchProvider.evalFilter();
-                        
-                        
-                    });
-                },
-                scope: undefined,
-                grid: undefined,
-            };
-
-            $scope.filterOptions = {
-                filterText: "",
-                useExternalFilter: true
-            };
-            
-
-            $scope.pagingOptions = {
-                pageSizes: [1,2,25, 50, 100],
-                pageSize: 25,
-                currentPage: 1,
-                totalServerItems: 0
-            };
-
-            $scope.getPagedDataAsync = function (pageSize, page) {
-                setTimeout(function () {
-                    $http.get('/Home/GetAdres').success(function (largeLoad) {
-                        $scope.sel = largeLoad;
-                        $scope.totalServerItems = largeLoad.length;
-                        angular.forEach(largeLoad, function (a, key) {
-                            largeLoad[key].Data = moment(largeLoad[key].Data).format('M/D/YYYY');
-                        });
-                        $scope.setPagingData(largeLoad, page, pageSize);
-                    });
-                }, 100);
-            };
-
-
-            $scope.setPagingData = function (data, page, pageSize) {
-                var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-                $scope.myData = pagedData;
-                $scope.totalServerItems = data.length;
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
-            };
-            
-            $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
-            
-            $scope.$watch('pagingOptions', function () {
-                $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
-            }, true);
-            
-            $scope.Data = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
-           + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
-               '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
-               '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
-               '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
-               '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
-               '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>' +
-              '<input type="text" date-range-picker class="form-control date-picker" ng-click="stopClickProp($event)" name="daterange" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>' +
-              '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
-            
-            $scope.gridOptions =
-                {
-                    data: 'myData',
-                    
-                    plugins: [filterBarPlugin],
-                    headerRowHeight: 60,
-                    enablePaging: true,
-                    pagingOptions: $scope.pagingOptions,
-                    showFooter: true,
-                    totalServerItems: 'totalServerItems',
-                    //rowTemplate: $scope.rowTemplate,
-                    columnDefs:
-                    [
-                    { field: 'Id', visible:false},
-                    { field: 'Country', headerCellTemplate: $scope.country },
-                    { field: 'City', headerCellTemplate: $scope.City },
-                    { field: 'Street', headerCellTemplate: $scope.Street },
-                    { field: 'House', headerCellTemplate: $scope.filterTemplate },
-                    { field: 'Indeks', headerCellTemplate: $scope.filterTemplate },
-                    { field: 'Data', headerCellTemplate: $scope.Data },
-                    ],
-                    
+                    },
+                    scope: undefined,
+                    grid: undefined,
                 };
-        });     
-        app.factory('AdresService', ['$http', function ($http) {
-            var AdresService = {}
-            AdresService.getAdres = function () {
-                return $http.get('/Home/GetAdres');
-            }
-            return AdresService;
-        }]);*/
 
-            var app = angular.module('AdresApp', ["ngTable"]);
-            app.controller('HomeController', HomeController);
-            function HomeController( $scope, $http, $filter, NgTableParams)
-            {
-                $scope.data = [];
-                $scope.adresSet = [];
-                $scope.getData = function ()
-                {
-                     $http.get('/Home/GetAdres').then(function (response) {
-                       /* angular.forEach(response, function (a, key) {
-                            response[key].Data = moment(response[key].Data).format('YYYY.D.M');
-                        })*/
-                        
-                        /*angular.forEach($scope.data, function (a, i) {
-                            $scope.adresSet[i] = [{
-                                Country: $scope.data[i].Country,
-                                City: $scope.data[i].City,
-                                Street: $scope.data[i].Street,
-                                House: $scope.data[i].House,
-                                Indeks: $scope.data[i].Indeks,
-                                Data: $scope.data[i].Data
-                            }];
-                        })*/
-                        response.data;
-                    });
+                $scope.filterOptions = {
+                    filterText: "",
+                    useExternalFilter: true
+                };
+
+
+                $scope.pagingOptions = {
+                    pageSizes: [1,2,25, 50, 100],
+                    pageSize: 25,
+                    currentPage: 1,
+                    totalServerItems: 0
+                };
+
+                $scope.getPagedDataAsync = function (pageSize, page) {
+                    setTimeout(function () {
+                        $http.get('/Home/GetAdres').success(function (largeLoad) {
+                            $scope.sel = largeLoad;
+                            $scope.totalServerItems = largeLoad.length;
+                            angular.forEach(largeLoad, function (a, key) {
+                                largeLoad[key].Data = moment(largeLoad[key].Data).format('M/D/YYYY');
+                            });
+                            $scope.setPagingData(largeLoad, page, pageSize);
+                        });
+                    }, 100);
+                };
+
+
+                $scope.setPagingData = function (data, page, pageSize) {
+                    var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
+                    $scope.myData = pagedData;
+                    $scope.totalServerItems = data.length;
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                };
+
+                $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+
+                $scope.$watch('pagingOptions', function () {
+                    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+                }, true);
+
+                $scope.Data = '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">'
+               + '<div ng-click="col.sort($event)" ng-class="\'colt\' + col.index" class="ngHeaderText">{{col.displayName}}</div>' +
+                   '<div class="ngSortButtonDown" ng-show="col.showSortButtonDown()"></div>' +
+                   '<div class="ngSortButtonUp" ng-show="col.showSortButtonUp()"></div>' +
+                   '<div class="ngSortPriority">{{col.sortPriority}}</div>' +
+                   '<div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div></div>' +
+                   '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>' +
+                  '<input type="text" date-range-picker class="form-control date-picker" ng-click="stopClickProp($event)" name="daterange" placeholder="Filter..." ng-model="col.filterText" ng-style="style" style="position: absolute; top: 30px; bottom: 30px; left: 0; bottom:0;"/>' +
+                  '<div ng-show="col.resizable" class="ngHeaderGrip" ng-click="col.gripClick($event)" ng-mousedown="col.gripOnMouseDown($event)"></div>';
+
+                $scope.gridOptions =
+                    {
+                        data: 'myData',
+
+                        plugins: [filterBarPlugin],
+                        headerRowHeight: 60,
+                        enablePaging: true,
+                        pagingOptions: $scope.pagingOptions,
+                        showFooter: true,
+                        totalServerItems: 'totalServerItems',
+                        //rowTemplate: $scope.rowTemplate,
+                        columnDefs:
+                        [
+                        { field: 'Id', visible:false},
+                        { field: 'Country', headerCellTemplate: $scope.country },
+                        { field: 'City', headerCellTemplate: $scope.City },
+                        { field: 'Street', headerCellTemplate: $scope.Street },
+                        { field: 'House', headerCellTemplate: $scope.filterTemplate },
+                        { field: 'Indeks', headerCellTemplate: $scope.filterTemplate },
+                        { field: 'Data', headerCellTemplate: $scope.Data },
+                        ],
+
+                    };
+            });
+            app.factory('AdresService', ['$http', function ($http) {
+                var AdresService = {}
+                AdresService.getAdres = function () {
+                    return $http.get('/Home/GetAdres');
                 }
+                return AdresService;
+            }]);*/
+            var app = angular.module('AdresApp', ["ngTable", "ngResource"]);
+            app.controller('HomeController', HomeController);
 
-                
+            function HomeController($scope, $http, $filter, $resource, NgTableParams) {
+                HomeController.$inject = ["$scope", "$filter", "$http", "NgTableParams", "$resource"];
+
+               /* $http.get('/Home/GetAdres').then(function (response) {
+                    /* angular.forEach(response, function (a, key) {
+                         response[key].Data = moment(response[key].Data).format('YYYY.D.M');
+                     })
+                    $scope.data = response.data;
+                    $scope.tableParams.total($scope.data.length);
+                    $scope.tableParams.reload();
+                });*/
+
                 var self = this;
                 //var data = [{ Country: "Britain", City: "London" }];
+                self.cols =
+                    [
+                    { field: "Country", title: "Country", sortable: "Country", filter: { Country: "text" }, show: true },
+                    { field: "City", title: "City", sortable: "City", filter: { City: "text" }, show: true },
+                    { field: "Street", title: "Street", sortable: "Street", filter: { Street: 'text' }, show: true },
+                    { field: "House", title: "House", sortable: "House", filter: { House: "text" }, show: true },
+                    { field: "Indeks", title: "Index", sortable: "Indeks", filter: { Indeks: 'text' }, show: true },
+                    { field: "Data", title: "Date", sortable: "Data", filter: { Data: 'text' }, show: true }
+                    ];
                 self.tableParams = new NgTableParams
-                    ({
-                        page: 1,
-                        count: 2,
-                        sorting: {},
-                        filter: {}
-                    },
-                    {
-                        filterDelay: 0,
-                        total: 0,
-                        getData: function ($defer, params)
-                        {
-                            /*$scope.getData().then(function (data) {
-                                var courses = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
-                                courses = params.filter() ? $filter('filter')(courses, params.filter()) : courses;
-                                courses = courses.slice(0, 20);
-                                $defer.resolve(courses);
-                            })
-                           /* $scope.getData();
-                            $scope.data = params.sorting() ? $filter('orderBy')($scope.courses, params.orderBy()) : $scope.courses;
-                            $scope.data = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
-                            $scope.data = $scope.data.slice(0, 20);
-                            return $scope.data;*/
-                            $http.get('/Home/GetAdres').then(function (response) {
-                                /* angular.forEach(response, function (a, key) {
-                                     response[key].Data = moment(response[key].Data).format('YYYY.D.M');
-                                 })*/
-                                $scope.data = response.data;
-                                $scope.data = params.sorting() ? $filter('orderBy')($scope.courses, params.orderBy()) : $scope.data;
-                                $scope.data = params.filter() ? $filter('filter')($scope.data, params.filter()) : $scope.data;
-                                $scope.data = $scope.data.slice(0, 20);
-                                return $scope.data;
-                            });
-                        }
-                    })
+                  ({
+                      page: 1,            // show first page
+                      total: 0,           // length of data
+                      count: 2,          // count per page
+
+                  },
+                  {
+                      sorting: {
+                          name: 'asc'     // initial sorting
+                      },
+                      filterDelay: 0,
+                      counts: [2, 5, 10, 25, 50],
+                      getData: function (params)
+                      {
+                          return $http.get('/Home/GetAdres').then(function (response) {
+                               angular.forEach(response.data, function (a, key) {
+                                   response.data[key].Data = moment(response.data[key].Data).format('YYYY.D.M');
+                               })
+                              var reports = response.data;
+                              params.total(reports.length);
+                              var orderedData = params.sorting() ? $filter('orderBy')(reports, params.orderBy()) : reports;
+                              return orderedData;
+                          });
+                      }
+                      //dataset: $scope.data
+                  });
+                self.tableParams.reload();
+                /*function applySelectedSort()
+                {
+                    self.tableParams.sorting(self.newSort, self.isSortDesc ? 'desc' : 'asc');
+                    self.newSort = "";
+                    self.newSortForm.$setPristine();
+                }
+                angular.module('AdresApp').run(configDef);
+                configDef.$inject = ["NgTableDefaults"];
+                function configDef(NgTableDefaults) {
+                    ngTableDefaults.params.count = 2;
+                    ngTableDefaults.settings.counts = [];
+                }*/
+
             }
-    </script>
+        </script>
 </body>
 
 
