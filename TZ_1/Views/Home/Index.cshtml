@@ -73,12 +73,8 @@
     <input type="text" data-range-picker name="daterange" value="" />
     <input date-range-picker class="form-control date-picker" type="text" name="daterange"/>
         -->
-   <!-- <table ng-table="Home.tableParams" class="table" >
-        <tr ng-repeat="adr in data" class="text-center" ng-class="{
-                                    'sort-asc': tableParams.isSortBy(adr.field, 'asc'),
-                                    'sort-desc': tableParams.isSortBy(adr.field, 'desc'),
-                                    'sortable': !$first
-                                    }"ng-click="tableParams.sorting(column.field, tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
+      <table ng-table="Home.tableParams" class="table" >
+        <tr ng-repeat="adr in $data" class="text-center">
             <td data-title="'Country'" filter="{ Country: 'text'}" sortable="'Country'">
 
                 {{adr.Country}}
@@ -95,17 +91,17 @@
             <td data-title="'Index'" filter="{ Indeks: 'number'}" sortable="'Indeks'">
                 {{adr.Indeks}}
             </td>
-            <td data-title="'Data'" filter="{ Data: 'data'}" sortable="'Data'">
+            <td data-title="'Data'" filter="{ Data: 'date'}" sortable="'Data'">
                 {{adr.Data}}
             </td>
         </tr>
-    </table>-->
+    </table>
     
-    <table ng-table-dynamic="Home.tableParams with Home.cols" class="table table-condensed table-bordered table-striped">
+    <!--<table ng-table-dynamic="Home.tableParams with Home.cols" class="table table-condensed table-bordered table-striped">
         <tr ng-repeat="row in $data">
             <td ng-repeat="col in $columns">{{row[col.field]}}</td>
         </tr>
-    </table>
+    </table>-->
         <script type="text/javascript">
 
 
@@ -352,36 +348,36 @@
                     { field: "Street", title: "Street", sortable: "Street", filter: { Street: 'text' }, show: true },
                     { field: "House", title: "House", sortable: "House", filter: { House: "text" }, show: true },
                     { field: "Indeks", title: "Index", sortable: "Indeks", filter: { Indeks: 'text' }, show: true },
-                    { field: "Data", title: "Date", sortable: "Data", filter: { Data: 'text' }, show: true }
+                    { field: "Data", title: "Date", sortable: "Data", filter: {Date: 'text'}, show: true }
                     ];
+
                 self.tableParams = new NgTableParams
                   ({
-                      page: 1,            // show first page
-                      total: 0,           // length of data
+                      page: 1,            // show first page           // length of data
                       count: 2,          // count per page
 
                   },
                   {
-                      sorting: {
-                          name: 'asc'     // initial sorting
-                      },
-                      filterDelay: 0,
                       counts: [2, 5, 10, 25, 50],
                       getData: function (params)
                       {
-                          return $http.get('/Home/GetAdres').then(function (response) {
-                               angular.forEach(response.data, function (a, key) {
+                          return $http.get('/Home/GetAdres').then(function (response)
+                          {
+                              angular.forEach(response.data, function (a, key)
+                              {
                                    response.data[key].Data = moment(response.data[key].Data).format('YYYY.D.M');
-                               })
+                              })
                               var reports = response.data;
+                              var filterData = params.filter() ? $filter('filter')(reports, params.filter()) : reports;
+                              var orderedData = params.sorting() ? $filter('orderBy')(filterData, params.orderBy()) : filterData;
+                              var orderedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
                               params.total(reports.length);
-                              var orderedData = params.sorting() ? $filter('orderBy')(reports, params.orderBy()) : reports;
                               return orderedData;
                           });
                       }
                       //dataset: $scope.data
                   });
-                self.tableParams.reload();
+                //self.tableParams.reload();
                 /*function applySelectedSort()
                 {
                     self.tableParams.sorting(self.newSort, self.isSortDesc ? 'desc' : 'asc');
